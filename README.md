@@ -12,11 +12,13 @@ A Python module for playing the Tower of Hanoi puzzle game.
 ![Tower of Hanoi Image](hanoi_game.py.png)
 
 
-Requires the pynput module to capture keypress events.
+Requires the pynput module to capture keypress input events.
 
 ```
 pip install pynput
 ```
+
+When the game is started, keypress input events are not passed onto the system.  Save and exit the game before using other programs.
 
 Please consider giving to cancer research.
 
