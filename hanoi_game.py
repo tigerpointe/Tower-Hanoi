@@ -36,12 +36,14 @@ https://www.cancer.org/
 from pynput.keyboard import Key, Listener
 import json
 import os
+import time
 
 
-def play(height=0):
+def play(height=0, solve=False):
     """ Starts the gameplay.
     PARAMETERS:
     height : tower height
+    solve  : solve automatically
     """
 
     # Sanity check for the maximum tower height
@@ -65,11 +67,10 @@ def play(height=0):
         """ Writes all the disks contained on each rod.
         The maximum width of each disk is two times the tower height.  Repeat
         the disk character based on the numeric disk value and RIGHT-justify
-        to half of the maximum width (i.e., the height).  Slice away enough
+        to half of the maximum width (i.e., the height).  Next, slice enough
         characters from the tail to hold the numeric label.  Then, repeat the
         disk character again based on the numeric disk value and LEFT-justify
-        to the other half of the maximum width (i.e., the height again).  The
-        whitespace is thereby dynamically calculated for any tower height.
+        to the other half of the maximum width (i.e., the height again).
         """
         for x in reversed(range(data['height'])):
             if (x < len(data['A'])):
@@ -95,6 +96,33 @@ def play(height=0):
               'A'.rjust(data['height']) + ' '.ljust(data['height']),
               'B'.rjust(data['height']) + ' '.ljust(data['height']),
               'C'.rjust(data['height']) + ' '.ljust(data['height']))
+
+    def solve_game(disk, source, target, spare):
+        """ Solves the game using a recursive subproblems code pattern.
+        PARAMETERS:
+        disk   : disk number
+        source : source rod
+        target : target rod
+        spare  : spare rod
+        """
+
+        # Stop the recursion when no more disks can be moved
+        if (disk < 1):
+            return
+
+        # Recursively move the next disk from the source to the spare
+        solve_game(disk=(disk - 1), source=source, target=spare, spare=target)
+
+        # Move the current disk from the source to the target
+        data[target].append(data[source].pop(data[source].index(disk)))
+        data['n'] += 1
+        print('\r\nMoving disk', disk, 'from', source, 'onto', target,
+              f"(move {data['n']:,})")
+        write_disks()
+        time.sleep(2)
+
+        # Recursively move the next disk from the spare to the target
+        solve_game(disk=(disk - 1), source=spare, target=target, spare=source)
 
     def save_game():
         """ Saves the game data to a file."""
@@ -127,10 +155,10 @@ def play(height=0):
         rod : rod name (A, B or C)
         """
 
-        # Pop the top disk from the source rod
+        # If unset, pop the top disk from the source rod
         if (data['disk'] is None) and (len(data[rod]) > 0):
             data['disk'] = data[rod].pop()
-            print('\r\nMoving disk', data['disk'], 'from rod', rod, '...')
+            print('\r\nMoving disk', data['disk'], 'from', rod, 'onto ...')
 
         # Otherwise, append the popped disk to the target rod
         elif (data['disk'] is not None):
@@ -141,7 +169,7 @@ def play(height=0):
                 data[rod].append(data['disk'])
                 data['disk'] = None
                 data['n'] += 1
-                print('  ... onto rod', rod, f"(move {data['n']:,})")
+                print('  ...', rod, f"(move {data['n']:,})")
                 write_disks()
             else:
                 print('  ... invalid move onto ', rod, ', try again', sep='')
@@ -179,10 +207,19 @@ def play(height=0):
         else:
             if (key == Key.esc):
                 return False
-        return True  # any other key, continue listening
+        return True  # for any other key, continue listening
 
-    # Begin listening for keypresses until False is returned
+    # Show the solution, if specified
+    if (solve):
+        print('\r\nSolving, please wait ...')
+        write_disks()
+        time.sleep(4)
+        solve_game(disk=data['height'], source='A', target='C', spare='B')
+        return
+
+    # Otherwise, begin listening for keypresses until False is returned
     # (suppress input events from being passed back to the console)
+    print('\r\nGood luck, move disks by pressing A, B, or C ...')
     write_disks()
     with Listener(on_press=on_press, suppress=True) as lstn:
         lstn.join()
@@ -192,13 +229,17 @@ def play(height=0):
 if __name__ == '__main__':
     try:
         print('\r\nTHE TOWER OF HANOI')
-        height = int(input('Please enter a height for the tower: '))
+        height = int(input('Please enter a height for the tower [0-12]: '))
+        solve = None
+        while (solve != 'y') and (solve != 'n'):
+            solve = input('Do you want the computer to play itself? [Y|N]: ')
+            solve = solve.lower()
         print('  Move all of the disks from rod A to rod C')
         print('  Press A, B or C to move a disk between two rods')
         print('  A larger disk cannot be placed on top of a smaller disk')
         print('  Press S to save the game, R or L to reload a saved game')
         print('  Press ESC or Q to quit')
-        play(height=height)
+        play(height=height, solve=(solve == 'y'))
         input('Press the ENTER key to exit the game: ')
     except Exception as e:
         print(str(e))
