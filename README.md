@@ -9,6 +9,7 @@ A Python module for playing the Tower of Hanoi puzzle game.
 * Up to twelve levels of difficultly
 * Save and reload your progress
 
+
 ![Tower of Hanoi Image](hanoi_game.py.png)
 
 
