@@ -235,7 +235,7 @@ if __name__ == '__main__':
             solve = input('Do you want the computer to play itself? [Y|N]: ')
             solve = solve.lower()
         print('  Move all of the disks from rod A to rod C')
-        print('  Press A, B or C to move a disk between two rods')
+        print('  Press A, B, or C to move a disk between two rods')
         print('  A larger disk cannot be placed on top of a smaller disk')
         print('  Press S to save the game, R or L to reload a saved game')
         print('  Press ESC or Q to quit')
