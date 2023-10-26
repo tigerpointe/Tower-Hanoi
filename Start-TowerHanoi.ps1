@@ -47,6 +47,7 @@ SOFTWARE.
 
 History:
 01.00 2023-Oct-19 Scott S. Initial release.
+01.01 2023-Oct-25 Scott S. Approved verbs for function names.
 
 .LINK
 https://en.wikipedia.org/wiki/Tower_of_Hanoi
@@ -60,7 +61,7 @@ https://www.cancer.org/
 #>
 # Requires -Version 5.1
 
-function Play-Game
+function Start-Gameplay
 # Starts the gameplay.
 {
   param
@@ -84,9 +85,9 @@ function Play-Game
   $data["C"] = New-Object System.Collections.ArrayList($null);
 
   # Initialize the state variables
-  $data["disk"] = $null;     # disk currently being moved
+  $data["disk"]   = $null;   # disk currently being moved
   $data["height"] = $height; # height of the tower
-  $data["n"] = 0;            # number of moves counter
+  $data["n"]      = 0;       # number of moves counter
 
   function Write-Disks
   # Writes all the disks contained on each rod.
@@ -150,7 +151,7 @@ function Play-Game
     Write-Host;
   }
 
-  function Solve-Game
+  function Step-ToSolve
   # Solves the game using a recursive subproblems code pattern.
   {
     param
@@ -165,11 +166,11 @@ function Play-Game
     if ($disk -lt 1) { return; }
 
     # Recursively move the next disk from the source to the spare
-    Solve-Game -disk ($disk - 1) `
-               -source $source -target $spare -spare $target;
+    Step-ToSolve -disk ($disk - 1) `
+                 -source $source -target $spare -spare $target;
 
     # Move the current disk from the source to the target
-    $idx = $data[$source].IndexOf($disk);
+    $idx   = $data[$source].IndexOf($disk);
     $value = $data[$source][$idx];
     $data[$source].RemoveAt($idx);
     [void]$data[$target].Add($value);
@@ -181,8 +182,8 @@ function Play-Game
     Start-Sleep -Seconds 2;
 
     # Recursively move the next disk from the spare to the target
-    Solve-Game -disk ($disk - 1) `
-               -source $spare -target $target -spare $source;
+    Step-ToSolve -disk ($disk - 1) `
+                 -source $spare -target $target -spare $source;
 
   }
 
@@ -190,29 +191,29 @@ function Play-Game
   # Saves the game data to a file.
   {
     $file = "$($PSCommandPath).txt";
-    $content = ConvertTo-Json -InputObject $data;
+    $content = (ConvertTo-Json -InputObject $data);
     $content | Set-Content -Path $file;
     Write-Host -Object "Game saved: $file";
     return $true;
   }
 
-  function Reload-Game
-  # Reloads the game data from a file.
+  function Restore-Game
+  # Restores the game data from a file.
   # Converts JSON dot notation objects into array lists.
   {
     $file = "$($PSCommandPath).txt";
     if (Test-Path -Path $file)
     {
-      $content = Get-Content -Path $file;
+      $content = (Get-Content -Path $file);
       $object = ($content | ConvertFrom-Json);
       $data["A"] = New-Object System.Collections.ArrayList(,$object.A);
       $data["B"] = New-Object System.Collections.ArrayList(,$object.B);
       $data["C"] = New-Object System.Collections.ArrayList(,$object.C);
-      $data["disk"] = $object.disk;
+      $data["disk"]   = $object.disk;
       $data["height"] = $object.height;
-      $data["n"] = $object.n;
-      Write-Host -Object "`r`nGame reloaded: $file";
-      if ($data["disk"] -ne $null)
+      $data["n"]      = $object.n;
+      Write-Host -Object "`r`nGame restored: $file";
+      if ($null -ne $data["disk"])
       {
         Write-Host -Object "Moving disk $($data["disk"]) ...";
       }
@@ -234,7 +235,7 @@ function Play-Game
     )
 
     # If unset, pop the top disk from the source rod
-    if (($data["disk"] -eq $null) -and ($data[$rod].Count -gt 0))
+    if (($null -eq $data["disk"]) -and ($data[$rod].Count -gt 0))
     {
       $idx = ($data[$rod].Count - 1);
       $data["disk"] = $data[$rod][$idx];
@@ -244,7 +245,7 @@ function Play-Game
     }
 
     # Otherwise, append the popped disk to the target rod
-    elseif ($data["disk"] -ne $null)
+    elseif ($null -ne $data["disk"])
     {
       $top = $null;
       if ($data[$rod].Count -gt 0)
@@ -252,11 +253,11 @@ function Play-Game
         $idx = ($data[$rod].Count - 1);
         $top = $data[$rod][$idx];
       }
-      if (($top -eq $null) -or ($data["disk"] -lt $top))
+      if (($null -eq $top) -or ($data["disk"] -lt $top))
       {
         [void]$data[$rod].Add($data["disk"]);
         $data["disk"] = $null;
-        $data["n"] += 1;
+        $data["n"]   += 1;
         Write-Host -Object "  ... $rod (move $($data["n"].ToString("N0")))";
         Write-Disks;
       }
@@ -280,8 +281,8 @@ function Play-Game
 
   }
 
-  function On-Press
-  # Handles the keypress event.
+  function Invoke-OnPress
+  # Invokes the keypress event.
   {
     param
     (
@@ -292,14 +293,13 @@ function Play-Game
       A       { return Move-Disk -rod 'A'; }
       B       { return Move-Disk -rod 'B'; }
       C       { return Move-Disk -rod 'C'; }
-      L       { return Reload-Game; }
-      R       { return Reload-Game; }
-      S       { return Save-Game;   }
+      L       { return Restore-Game; }
+      R       { return Restore-Game; }
+      S       { return Save-Game;    }
       Q       { return $false; }
       Escape  { return $false; }
       default { return $true;  } # for any other key, continue listening
     }
-
   }
 
   # Show the solution, if specified
@@ -308,12 +308,12 @@ function Play-Game
     Write-Host -Object "`r`nSolving, please wait ...";
     Write-Disks;
     Start-Sleep -Seconds 4;
-    Solve-Game -disk $data["height"] -source "A" -target "C" -spare "B";
+    Step-ToSolve -disk $data["height"] -source "A" -target "C" -spare "B";
     return;
   }
 
   # Sanity check for the integrated scripting environment (ISE) and exit
-  if ($psISE -ne $null)
+  if ($null -ne $psISE)
   {
     throw "An interactive game can only be started from the console window.";
   }
@@ -327,8 +327,8 @@ function Play-Game
 
     # Wait for a keypress (blocking code pattern)
     $read = [Console]::ReadKey($true); # true = do not echo key value
-    $running = On-Press($read.Key);
-  
+    $running = Invoke-OnPress($read.Key);
+
   }
 
 }
@@ -351,9 +351,9 @@ try
   Write-Host -Object `
     "  A larger disk cannot be placed on top of a smaller disk";
   Write-Host -Object `
-    "  Press S to save the game, R or L to reload a saved game";
+    "  Press S to save the game, R or L to restore/load a saved game";
   Write-Host -Object "  Press ESC or Q to quit";
-  Play-Game -height $height -solve ($solve -eq "y");
+  Start-Gameplay -height $height -solve ($solve -eq "y");
   Read-Host -Prompt "Press the ENTER key to exit the game";
 }
 catch
