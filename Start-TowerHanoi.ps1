@@ -139,13 +139,15 @@ function Start-Gameplay
         $outC = "|".PadLeft($data["height"]);
         $outC = $outC + " ".PadRight($data["height"]);
       }
-      Write-Host -Object "  : $($outA)$($outB)$($outC)";
+      Write-Host -Object "  : $($outA) $($outB) $($outC)";
     }
     Write-Host -NoNewline -Object "  : ";
     Write-Host -NoNewline -Object "A".PadLeft($data["height"]);
     Write-Host -NoNewline -Object " ".PadRight($data["height"]);
+    Write-Host -NoNewline -Object " ";
     Write-Host -NoNewline -Object "B".PadLeft($data["height"]);
     Write-Host -NoNewline -Object " ".PadRight($data["height"]);
+    Write-Host -NoNewline -Object " ";
     Write-Host -NoNewline -Object "C".PadLeft($data["height"]);
     Write-Host -NoNewline -Object " ".PadRight($data["height"]);
     Write-Host;
