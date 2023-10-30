@@ -19,9 +19,16 @@ Python requires the pynput module to capture keypress input events.
 pip install pynput
 ```
 
-When the game is started, keypress input events are not passed onto the system.  Save and exit the game before using other programs.
+When the Python game is started, keypress input events are captured but not passed onto the system.  Save and exit the game before using other programs.
 
 The PowerShell script MUST be started from a real console window, not an ISE, because keypress detection is used.
+
+Unsigned downloaded PowerShell scripts need to be unblocked before use.
+```
+Unblock-File -Path .\Start-TowerHanoi.ps1
+```
+
+Bonus PowerShell Script:  A holiday themed "XMas Tree" Tower of Hanoi game.
 
 Please consider giving to cancer research.
 

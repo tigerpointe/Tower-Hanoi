@@ -1,7 +1,7 @@
 ﻿<#
 
 .SYNOPSIS
-A PowerShell module for playing the Tower of Hanoi puzzle game.
+A PowerShell module for playing the Xmas Tree (Tower of Hanoi) puzzle game.
 
 .DESCRIPTION
 Implements a recursive subproblems code pattern.
@@ -19,10 +19,13 @@ None.
 A whole lot of fun.
 
 .EXAMPLE
-.\Start-TowerHanoi.ps1
+.\Start-XmasTree.ps1
 Starts the program.
 
 .NOTES
+Instead of disks and rods, this holiday-themed "Tower of Hanoi" game is played
+with boughs and bases.
+
 MIT License
 
 Copyright (c) 2023 TigerPointe Software, LLC
@@ -46,8 +49,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 History:
-01.00 2023-Oct-19 Scott S. Initial release.
-01.01 2023-Oct-25 Scott S. Approved verbs for function names.
+01.00 2023-Oct-31 Scott S. Initial release.
+
+.LINK
+https://github.com/tigerpointe
 
 .LINK
 https://en.wikipedia.org/wiki/Tower_of_Hanoi
@@ -70,10 +75,52 @@ function Start-Gameplay
     , [bool]$solve = $false # solve automatically
   )
 
-  # Sanity check for the maximum tower height
-  if ($height -gt 12)
-  {               # 12 requires 4,095 moves ((2 ** height) - 1)
-    $height = 12; # higher values are unlikely to be playable
+  # Sanity checks for the minimum/maximum tower height
+  if ($height -lt 2)
+  {
+    $height = 2;
+  }
+  elseif ($height -gt 7)
+  {
+    $height = 7; # 7 requires 127 moves ((2 ** height) - 1)
+  }
+
+  # Define the ASCII artwork (original image by Scott S.)
+  # Each disk level must contain three rows of text
+  $ascii = @"
+           _/^\_
+          <  o  >
+           /.^.\
+            /"\ 
+          ( o o )
+          '"'"'"'
+        ./'"'"'"'\.
+        ( o  o  o )
+        "'"'"'"'"'"
+      ./"'"'"'"'"'"\.
+      ( o  o   o  o )
+      '"'"'"'"'"'"'"'
+    ./'"'"'"'"'"'"'"'\.
+    ( O  O   O   O  O )
+    "'"'"'"'"'"'"'"'"'"
+  ./"'"'"'"'"'"'"'"'"'"\.
+  ( O  O   O   O   O  O )
+  '"'"'"'"'"'"'"'"'"'"'"'
+./'"'"'"'"'"'"'"'"'"'"'"'\.
+( O  O   O   O   O   O  O )
+ "'"'"'"'"'"'"'"'"'"'"'"'"
+         '=,...,='
+     ..--..]###[..--..
+=============X=============
+"@;
+
+  # Split the artwork into lines of padded equal width
+  $ascii = $ascii.Replace("`r", "");
+  $lines = $ascii.Split("`n");
+  $width = $lines[$lines.Count - 1].Length;
+  for ($idx = 0; $idx -lt $lines.Count; $idx++)
+  {
+    $lines[$idx] = $lines[$idx].PadRight($width);
   }
 
   # Create a new dictionary for the game data (can be saved as JSON)
@@ -91,66 +138,97 @@ function Start-Gameplay
 
   function Write-Disks
   # Writes all the disks contained on each rod.
-  # The maximum width of each disk is two times the tower height.  Repeat
-  # the disk character based on the numeric disk value and RIGHT-justify
-  # to half of the maximum width (i.e., the height).  Next, slice enough
-  # characters from the tail to hold the numeric label.  Then, repeat the
-  # disk character again based on the numeric disk value and LEFT-justify
-  # to the other half of the maximum width (i.e., the height again).
   {
     for ($x = ($data["height"] - 1); $x -ge 0; $x--)
     {
+      $colorA = [System.ConsoleColor]::Green;
+      $colorB = [System.ConsoleColor]::Green;
+      $colorC = [System.ConsoleColor]::Green;
       if ($x -lt $data["A"].Count)
       {
-        $outA = ("=" * $data["A"][$x]).PadLeft($data["height"]);
-        $outA = $outA.Substring(0, `
-                  $outA.Length - $data["A"][$x].ToString().Length);
-        $outA = $outA + $data["A"][$x].ToString();
-        $outA = $outA + ("=" * $data["A"][$x]).PadRight($data["height"]);
+        $idx   = ($data["A"][$x] - 1) * 3;
+        $outA1 = $lines[$idx];
+        $outA2 = $lines[$idx + 1];
+        $outA3 = $lines[$idx + 2];
+        if ($data["A"][$x] -eq 1)
+        {
+          $colorA = [System.ConsoleColor]::Yellow;
+        }
       }
       else
       {
-        $outA = "|".PadLeft($data["height"]);
-        $outA = $outA + " ".PadRight($data["height"]);
+        $outA1 = (" " * $lines[0].Length);
+        $outA2 = (" " * $lines[0].Length);
+        $outA3 = (" " * $lines[0].Length);
       }
       if ($x -lt $data["B"].Count)
       {
-        $outB = ("=" * $data["B"][$x]).PadLeft($data["height"]);
-        $outB = $outB.Substring(0, `
-                  $outB.Length - $data["B"][$x].ToString().Length);
-        $outB = $outB + $data["B"][$x].ToString();
-        $outB = $outB + ("=" * $data["B"][$x]).PadRight($data["height"]);
+        $idx   = ($data["B"][$x] - 1) * 3;
+        $outB1 = $lines[$idx];
+        $outB2 = $lines[$idx + 1];
+        $outB3 = $lines[$idx + 2];
+        if ($data["B"][$x] -eq 1)
+        {
+          $colorB = [System.ConsoleColor]::Yellow;
+        }
       }
       else
       {
-        $outB = "|".PadLeft($data["height"]);
-        $outB = $outB + " ".PadRight($data["height"]);
+        $outB1 = (" " * $lines[0].Length);
+        $outB2 = (" " * $lines[0].Length);
+        $outB3 = (" " * $lines[0].Length);
       }
       if ($x -lt $data["C"].Count)
       {
-        $outC = ("=" * $data["C"][$x]).PadLeft($data["height"]);
-        $outC = $outC.Substring(0, `
-                  $outC.Length - $data["C"][$x].ToString().Length);
-        $outC = $outC + $data["C"][$x].ToString();
-        $outC = $outC + ("=" * $data["C"][$x]).PadRight($data["height"]);
+        $idx   = ($data["C"][$x] - 1) * 3;
+        $outC1 = $lines[$idx];
+        $outC2 = $lines[$idx + 1];
+        $outC3 = $lines[$idx + 2];
+        if ($data["C"][$x] -eq 1)
+        {
+          $colorC = [System.ConsoleColor]::Yellow;
+        }
       }
       else
       {
-        $outC = "|".PadLeft($data["height"]);
-        $outC = $outC + " ".PadRight($data["height"]);
+        $outC1 = (" " * $lines[0].Length);
+        $outC2 = (" " * $lines[0].Length);
+        $outC3 = (" " * $lines[0].Length);
       }
-      Write-Host -Object "  : $($outA) $($outB) $($outC)";
+      Write-Host -NoNewline -ForegroundColor $colorA -Object $outA1;
+      Write-Host -NoNewline -ForegroundColor $colorB -Object $outB1;
+      Write-Host -NoNewline -ForegroundColor $colorC -Object $outC1;
+      Write-Host;
+      Write-Host -NoNewline -ForegroundColor $colorA -Object $outA2;
+      Write-Host -NoNewline -ForegroundColor $colorB -Object $outB2;
+      Write-Host -NoNewline -ForegroundColor $colorC -Object $outC2;
+      Write-Host;
+      Write-Host -NoNewline -ForegroundColor $colorA -Object $outA3;
+      Write-Host -NoNewline -ForegroundColor $colorB -Object $outB3;
+      Write-Host -NoNewline -ForegroundColor $colorC -Object $outC3;
+      Write-Host;
     }
-    Write-Host -NoNewline -Object "  : ";
-    Write-Host -NoNewline -Object "A".PadLeft($data["height"]);
-    Write-Host -NoNewline -Object " ".PadRight($data["height"]);
-    Write-Host -NoNewline -Object " ";
-    Write-Host -NoNewline -Object "B".PadLeft($data["height"]);
-    Write-Host -NoNewline -Object " ".PadRight($data["height"]);
-    Write-Host -NoNewline -Object " ";
-    Write-Host -NoNewline -Object "C".PadLeft($data["height"]);
-    Write-Host -NoNewline -Object " ".PadRight($data["height"]);
+    $color = [System.ConsoleColor]::DarkGray;
+    Write-Host -NoNewline -ForegroundColor $color `
+               -Object $lines[$lines.Count - 3];
+    Write-Host -NoNewline -ForegroundColor $color `
+               -Object $lines[$lines.Count - 3];
+    Write-Host -NoNewline -ForegroundColor $color `
+               -Object $lines[$lines.Count - 3];
     Write-Host;
+    Write-Host -NoNewline -ForegroundColor $color `
+               -Object $lines[$lines.Count - 2];
+    Write-Host -NoNewline -ForegroundColor $color `
+               -Object $lines[$lines.Count - 2];
+    Write-Host -NoNewline -ForegroundColor $color `
+               -Object $lines[$lines.Count - 2];
+    Write-Host;
+    $label  = $lines[$lines.Count - 1].Replace("=", " ");
+    $labelA = $label.Replace("X", "A");
+    $labelB = $label.Replace("X", "B");
+    $labelC = $label.Replace("X", "C");
+    Write-Host -BackgroundColor Red -ForegroundColor White `
+               -Object "$labelA$labelB$labelC";
   }
 
   function Step-ToSolve
@@ -178,7 +256,7 @@ function Start-Gameplay
     [void]$data[$target].Add($value);
     $data["n"] += 1;
     Write-Host -Object `
-      ("`r`nMoving disk $disk from $source onto $target " + `
+      ("Moving bough $disk from $source onto $target " + `
       "(move $($data["n"].ToString("N0")))");
     Write-Disks;
     Start-Sleep -Seconds 2;
@@ -214,11 +292,11 @@ function Start-Gameplay
       $data["disk"]   = $object.disk;
       $data["height"] = $object.height;
       $data["n"]      = $object.n;
-      Write-Host -Object "`r`nGame restored: $file";
+      Write-Host -Object "Game restored: $file";
       Write-Disks;
       if ($null -ne $data["disk"])
       {
-        Write-Host -Object "`r`nMoving disk $($data["disk"]) onto ...";
+        Write-Host -Object "Moving bough $($data["disk"]) onto ...";
       }
     }
     else
@@ -243,7 +321,7 @@ function Start-Gameplay
       $data["disk"] = $data[$rod][$idx];
       $data[$rod].RemoveAt($idx);
       Write-Host -Object `
-        "`r`nMoving disk $($data["disk"]) from $rod onto ...";
+        "Moving bough $($data["disk"]) from $rod onto ...";
     }
 
     # Otherwise, append the popped disk to the target rod
@@ -321,7 +399,7 @@ function Start-Gameplay
   }
 
   # Otherwise, begin listening for keypresses until False is returned
-  Write-Host -Object "`r`nGood luck, move disks by pressing A, B, or C ...";
+  Write-Host -Object "`r`nGood luck, move boughs by pressing A, B, or C ...";
   Write-Disks;
   $running = $true;
   while ($running)
@@ -338,9 +416,11 @@ function Start-Gameplay
 # Start the program interactively
 try
 {
-  Write-Host -Object "`r`nTHE TOWER OF HANOI";
+  Clear-Host;
+  Write-Host -ForegroundColor White -BackgroundColor Red `
+             -Object "         THE XMAS TREE GAME (TOWER OF HANOI)         ";
   [int]$height = Read-Host -Prompt `
-                   "Please enter a height for the tower [0-12]";
+                   "Enter the Xmas tree height/difficulty level [2-7]";
   $solve = " ";
   while (-not "yn".Contains($solve))
   {
@@ -348,17 +428,24 @@ try
                "Do you want the computer to play itself? [Y|N]";
     $solve = $solve.ToLower();
   }
-  Write-Host -Object "  Move all of the disks from rod A to rod C";
-  Write-Host -Object "  Press A, B, or C to move a disk between two rods";
+  Write-Host -Object "  Move all of the boughs from base A to base C";
+  Write-Host -Object "  Press A, B, or C to move a bough between two bases";
   Write-Host -Object `
-    "  A larger disk cannot be placed on top of a smaller disk";
+    "  A larger bough cannot be placed on top of a smaller bough";
+  Write-Host -Object `
+    "  Each bough is numbered according to its ornament count";
   Write-Host -Object `
     "  Press S to save the game, R or L to restore/load a saved game";
   Write-Host -Object "  Press ESC or Q to quit";
   Start-Gameplay -height $height -solve ($solve -eq "y");
-  Read-Host -Prompt "Press the ENTER key to exit the game";
+  Write-Host -ForegroundColor Cyan `
+             -Object "MERRY CHRISTMAS AND HAPPY HOLIDAYS";
 }
 catch
 {
   Write-Error -Message $_.Exception.Message;
+}
+finally
+{
+  Read-Host -Prompt "Press the ENTER key to exit the game";
 }

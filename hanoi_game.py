@@ -142,9 +142,9 @@ def play(height=0, solve=False):
             data = json.loads(f.read())
             f.close()
             print('\r\nGame reloaded:', file)
-            if ((data['disk']) is not None):
-                print('Moving disk', data['disk'], '...')
             write_disks()
+            if ((data['disk']) is not None):
+                print('\r\nMoving disk', data['disk'], 'onto ...')
         else:
             print('File not found:', file)
         return True
