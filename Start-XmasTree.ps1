@@ -417,7 +417,7 @@ function Start-Gameplay
 try
 {
   Clear-Host;
-  Write-Host -ForegroundColor White -BackgroundColor Red `
+  Write-Host -BackgroundColor Red -ForegroundColor White `
              -Object "         THE XMAS TREE GAME (TOWER OF HANOI)         ";
   [int]$height = Read-Host -Prompt `
                    "Enter the Xmas tree height/difficulty level [2-7]";
