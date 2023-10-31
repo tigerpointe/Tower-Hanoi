@@ -79,7 +79,7 @@ function Start-Gameplay
   # Sanity checks for the minimum/maximum tower height
   if ($height -lt 2)
   {
-    $height = 2;
+    $height = 2; # 2 requires 3 moves ((2 ** height) - 1)
   }
   elseif ($height -gt 7)
   {
@@ -159,8 +159,8 @@ function Start-Gameplay
       else
       {
         $outA1 = (" " * $lines[0].Length);
-        $outA2 = (" " * $lines[0].Length);
-        $outA3 = (" " * $lines[0].Length);
+        $outA2 = $outA1;
+        $outA3 = $outA1;
       }
       if ($x -lt $data["B"].Count)
       {
@@ -176,8 +176,8 @@ function Start-Gameplay
       else
       {
         $outB1 = (" " * $lines[0].Length);
-        $outB2 = (" " * $lines[0].Length);
-        $outB3 = (" " * $lines[0].Length);
+        $outB2 = $outB1;
+        $outB3 = $outB1;
       }
       if ($x -lt $data["C"].Count)
       {
@@ -193,8 +193,8 @@ function Start-Gameplay
       else
       {
         $outC1 = (" " * $lines[0].Length);
-        $outC2 = (" " * $lines[0].Length);
-        $outC3 = (" " * $lines[0].Length);
+        $outC2 = $outC1;
+        $outC3 = $outC1;
       }
       Write-Host -NoNewline -ForegroundColor $colorA -Object $outA1;
       Write-Host -NoNewline -ForegroundColor $colorB -Object $outB1;
