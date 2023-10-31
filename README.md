@@ -28,7 +28,9 @@ Unsigned downloaded PowerShell scripts need to be unblocked before use.
 Unblock-File -Path .\Start-TowerHanoi.ps1
 ```
 
-Bonus PowerShell Script:  A holiday themed "XMas Tree" Tower of Hanoi game.
+Bonus PowerShell Script:  A holiday themed "Xmas Tree" Tower of Hanoi game.
+
+![Xmas Tree Image](Start-XmasTree.ps1.png)
 
 Please consider giving to cancer research.
 
