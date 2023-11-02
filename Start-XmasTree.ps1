@@ -115,7 +115,7 @@ function Start-Gameplay
 =============X=============
 "@;
 
-  # Split the artwork into lines of padded equal width
+  # Split the artwork into lines (padded to equal widths)
   $ascii = $ascii.Replace("`r", "");
   $lines = $ascii.Split("`n");
   $width = $lines[$lines.Count - 1].Length;
@@ -140,11 +140,17 @@ function Start-Gameplay
   function Write-Disks
   # Writes all the disks contained on each rod.
   {
+
+    # Loop through all rods A, B, C disk levels in reverse order
     for ($x = ($data["height"] - 1); $x -ge 0; $x--)
     {
+
+      # Set the default colors
       $colorA = [System.ConsoleColor]::Green;
       $colorB = [System.ConsoleColor]::Green;
       $colorC = [System.ConsoleColor]::Green;
+
+      # Set rod A level as disk or spaces
       if ($x -lt $data["A"].Count)
       {
         $idx   = ($data["A"][$x] - 1) * 3;
@@ -153,7 +159,7 @@ function Start-Gameplay
         $outA3 = $lines[$idx + 2];
         if ($data["A"][$x] -eq 1)
         {
-          $colorA = [System.ConsoleColor]::Yellow;
+          $colorA = [System.ConsoleColor]::Yellow; # special top color
         }
       }
       else
@@ -162,6 +168,8 @@ function Start-Gameplay
         $outA2 = $outA1;
         $outA3 = $outA1;
       }
+
+      # Set rod B level as disk or spaces
       if ($x -lt $data["B"].Count)
       {
         $idx   = ($data["B"][$x] - 1) * 3;
@@ -170,7 +178,7 @@ function Start-Gameplay
         $outB3 = $lines[$idx + 2];
         if ($data["B"][$x] -eq 1)
         {
-          $colorB = [System.ConsoleColor]::Yellow;
+          $colorB = [System.ConsoleColor]::Yellow; # special top color
         }
       }
       else
@@ -179,6 +187,8 @@ function Start-Gameplay
         $outB2 = $outB1;
         $outB3 = $outB1;
       }
+
+      # Set rod C level as disk or spaces
       if ($x -lt $data["C"].Count)
       {
         $idx   = ($data["C"][$x] - 1) * 3;
@@ -187,7 +197,7 @@ function Start-Gameplay
         $outC3 = $lines[$idx + 2];
         if ($data["C"][$x] -eq 1)
         {
-          $colorC = [System.ConsoleColor]::Yellow;
+          $colorC = [System.ConsoleColor]::Yellow; # special top color
         }
       }
       else
@@ -196,6 +206,8 @@ function Start-Gameplay
         $outC2 = $outC1;
         $outC3 = $outC1;
       }
+
+      # Write the disk level for rods A, B, C
       Write-Host -NoNewline -ForegroundColor $colorA -Object $outA1;
       Write-Host -NoNewline -ForegroundColor $colorB -Object $outB1;
       Write-Host -NoNewline -ForegroundColor $colorC -Object $outC1;
@@ -208,7 +220,10 @@ function Start-Gameplay
       Write-Host -NoNewline -ForegroundColor $colorB -Object $outB3;
       Write-Host -NoNewline -ForegroundColor $colorC -Object $outC3;
       Write-Host;
+
     }
+
+    # Write the rod bases A, B, C
     $color = [System.ConsoleColor]::DarkGray;
     Write-Host -NoNewline -ForegroundColor $color `
                -Object $lines[$lines.Count - 3];
@@ -224,12 +239,15 @@ function Start-Gameplay
     Write-Host -NoNewline -ForegroundColor $color `
                -Object $lines[$lines.Count - 2];
     Write-Host;
+
+   # Write the rod labels A, B, C
     $label  = $lines[$lines.Count - 1].Replace("=", " ");
     $labelA = $label.Replace("X", "A");
     $labelB = $label.Replace("X", "B");
     $labelC = $label.Replace("X", "C");
     Write-Host -BackgroundColor Red -ForegroundColor White `
                -Object "$labelA$labelB$labelC";
+
   }
 
   function Step-ToSolve
