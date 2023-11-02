@@ -72,7 +72,7 @@ function Start-Gameplay
 {
   param
   (
-      [int]$height = 5      # tower height
+      [int]$height = 2      # tower height
     , [bool]$solve = $false # solve automatically
   )
 
