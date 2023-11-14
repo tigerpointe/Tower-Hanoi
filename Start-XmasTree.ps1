@@ -404,7 +404,7 @@ function Start-Gameplay
   # Show the solution, if specified
   if ($solve)
   {
-    Write-Host -Object "`r`nSolving, please wait ...";
+    Write-Host -Object "Solving, please wait ...`r`n";
     Write-Disks;
     Start-Sleep -Seconds 4;
     Step-ToSolve -disk $data["height"] -source "A" -target "C" -spare "B";
@@ -418,7 +418,7 @@ function Start-Gameplay
   }
 
   # Otherwise, begin listening for keypresses until False is returned
-  Write-Host -Object "`r`nGood luck, move boughs by pressing A, B, or C ...";
+  Write-Host -Object "Good luck, move boughs by pressing A, B, or C ...`r`n";
   Write-Disks;
   $running = $true;
   while ($running)
