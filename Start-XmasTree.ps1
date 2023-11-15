@@ -67,28 +67,9 @@ https://www.cancer.org/
 
 # Requires -Version 5.1
 
-function Start-Gameplay
-# Starts the gameplay.
-{
-  param
-  (
-      [int]$height = 2      # tower height
-    , [bool]$solve = $false # solve automatically
-  )
-
-  # Sanity checks for the minimum/maximum tower height
-  if ($height -lt 2)
-  {
-    $height = 2; # 2 requires 3 moves ((2 ** height) - 1)
-  }
-  elseif ($height -gt 7)
-  {
-    $height = 7; # 7 requires 127 moves ((2 ** height) - 1)
-  }
-
-  # Define the ASCII artwork (original image by Scott S.)
-  # Each disk level must contain three rows of text
-  $ascii = @"
+# Define the ASCII artwork (original image by Scott S.)
+# Each disk level must contain three rows of text
+$ascii = @"
            _/^\_
           <  o  >
            /.^.\
@@ -114,6 +95,25 @@ function Start-Gameplay
      ..--..]###[..--..
 =============X=============
 "@;
+
+function Start-Gameplay
+# Starts the gameplay.
+{
+  param
+  (
+      [int]$height = 2      # tower height
+    , [bool]$solve = $false # solve automatically
+  )
+
+  # Sanity checks for the minimum/maximum tower height
+  if ($height -lt 2)
+  {
+    $height = 2; # 2 requires 3 moves ((2 ** height) - 1)
+  }
+  elseif ($height -gt 7)
+  {
+    $height = 7; # 7 requires 127 moves ((2 ** height) - 1)
+  }
 
   # Split the artwork into lines (padded to equal widths)
   $ascii = $ascii.Replace("`r", "");
@@ -225,22 +225,25 @@ function Start-Gameplay
 
     # Write the rod bases A, B, C
     $color = [System.ConsoleColor]::DarkGray;
+    $out   = $lines[$lines.Count - 3];
     Write-Host -NoNewline -ForegroundColor $color `
-               -Object $lines[$lines.Count - 3];
+               -Object $out;
     Write-Host -NoNewline -ForegroundColor $color `
-               -Object $lines[$lines.Count - 3];
+               -Object $out;
     Write-Host -NoNewline -ForegroundColor $color `
-               -Object $lines[$lines.Count - 3];
+               -Object $out;
     Write-Host;
+    $color = [System.ConsoleColor]::DarkGray;
+    $out   = $lines[$lines.Count - 2];
     Write-Host -NoNewline -ForegroundColor $color `
-               -Object $lines[$lines.Count - 2];
+               -Object $out;
     Write-Host -NoNewline -ForegroundColor $color `
-               -Object $lines[$lines.Count - 2];
+               -Object $out;
     Write-Host -NoNewline -ForegroundColor $color `
-               -Object $lines[$lines.Count - 2];
+               -Object $out;
     Write-Host;
 
-   # Write the rod labels A, B, C
+    # Write the rod labels A, B, C
     $label  = $lines[$lines.Count - 1].Replace("=", " ");
     $labelA = $label.Replace("X", "A");
     $labelB = $label.Replace("X", "B");
