@@ -57,7 +57,7 @@ import json
 import os
 import time
 
-# Enable console escape codes
+# Enable the console escape codes
 os.system('')
 
 # Define the ASCII artwork (original image by Scott S.)

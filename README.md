@@ -13,10 +13,16 @@ A module for playing the Tower of Hanoi puzzle game in Python or PowerShell.
 ![Tower of Hanoi Image](hanoi_game.py.png)
 
 
+Python requires version 3.10 or greater (uses a match-case statement).
+
 Python requires the pynput module to capture keypress input events.
 
 ```
 pip install pynput
+```
+
+```
+pip3 install pynput
 ```
 
 When the Python game is started, keypress input events are captured but not passed onto the system.  Save and exit the game before using other programs.
@@ -24,13 +30,16 @@ When the Python game is started, keypress input events are captured but not pass
 The PowerShell script MUST be started from a real console window, not an ISE, because keypress detection is used.
 
 Unsigned downloaded PowerShell scripts need to be unblocked before use.
+
 ```
 Unblock-File -Path .\Start-TowerHanoi.ps1
 ```
 
-Bonus PowerShell Script:  A holiday themed "Xmas Tree" Tower of Hanoi game.
+Bonus Scripts:  Holiday themed "Xmas Tree" Tower of Hanoi games for Python or PowerShell.
+
 
 ![Xmas Tree Image](Start-XmasTree.ps1.png)
+
 
 Please consider giving to cancer research.
 
