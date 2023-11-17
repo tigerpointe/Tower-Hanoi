@@ -13,8 +13,6 @@ A module for playing the Tower of Hanoi puzzle game in Python or PowerShell.
 ![Tower of Hanoi Image](hanoi_game.py.png)
 
 
-Python requires version 3.10 or greater (uses a match-case statement).
-
 Python requires the pynput module to capture keypress input events.
 
 ```
