@@ -10,8 +10,8 @@ with boughs and bases.
 
 ANSI Color Escape Codes
 (ex. foreground black '\033[30m' and background white '\033[47m')
-Reset   0  0
 COLOR   FG BG
+Reset   0  0
 Black   30 40
 Red     31 41
 Green   32 42
