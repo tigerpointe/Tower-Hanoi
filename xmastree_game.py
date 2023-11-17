@@ -109,6 +109,7 @@ def play(height=2, solve=False):
     del lines[0]
     width = len(lines[len(lines) - 1])
     for idx in range(len(lines)):
+        lines[idx] = lines[idx].rstrip()
         lines[idx] = lines[idx].ljust(width)
 
     # Create a new dictionary for the game data (can be saved as JSON)
@@ -145,7 +146,7 @@ def play(height=2, solve=False):
                 if ((data['A'][x] == 1)):
                     colorA = '\033[33m'  # special top color
             else:
-                outA1 = " " * len(lines[0])
+                outA1 = ' ' * len(lines[0])
                 outA2 = outA1
                 outA3 = outA1
 
@@ -158,7 +159,7 @@ def play(height=2, solve=False):
                 if ((data['B'][x] == 1)):
                     colorB = '\033[33m'  # special top color
             else:
-                outB1 = " " * len(lines[0])
+                outB1 = ' ' * len(lines[0])
                 outB2 = outB1
                 outB3 = outB1
 
@@ -171,7 +172,7 @@ def play(height=2, solve=False):
                 if ((data['C'][x] == 1)):
                     colorC = '\033[33m'  # special top color
             else:
-                outC1 = " " * len(lines[0])
+                outC1 = ' ' * len(lines[0])
                 outC2 = outC1
                 outC3 = outC1
 
@@ -289,21 +290,20 @@ def play(height=2, solve=False):
         key : pressed key
         """
         if (hasattr(key, 'char')):
-            match (key.char):
-                case ('a'):
-                    return move_disk(rod='A')
-                case ('b'):
-                    return move_disk(rod='B')
-                case ('c'):
-                    return move_disk(rod='C')
-                case ('l'):
-                    return reload_game()
-                case ('r'):
-                    return reload_game()
-                case ('s'):
-                    return save_game()
-                case ('q'):
-                    return False
+            if (key.char == 'a'):
+                return move_disk(rod='A')
+            elif (key.char == 'b'):
+                return move_disk(rod='B')
+            elif (key.char == 'c'):
+                return move_disk(rod='C')
+            elif (key.char == 'l'):
+                return reload_game()
+            elif (key.char == 'r'):
+                return reload_game()
+            elif (key.char == 's'):
+                return save_game()
+            elif (key.char == 'q'):
+                return False
         else:
             if (key == Key.esc):
                 return False
