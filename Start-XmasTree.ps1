@@ -121,6 +121,7 @@ function Start-Gameplay
   $width = $lines[$lines.Count - 1].Length;
   for ($idx = 0; $idx -lt $lines.Count; $idx++)
   {
+    $lines[$idx] = $lines[$idx].TrimEnd();
     $lines[$idx] = $lines[$idx].PadRight($width);
   }
 
