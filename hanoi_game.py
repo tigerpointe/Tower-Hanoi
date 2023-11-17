@@ -189,21 +189,20 @@ def play(height=0, solve=False):
         key : pressed key
         """
         if (hasattr(key, 'char')):
-            match (key.char):
-                case ('a'):
-                    return move_disk(rod='A')
-                case ('b'):
-                    return move_disk(rod='B')
-                case ('c'):
-                    return move_disk(rod='C')
-                case ('l'):
-                    return reload_game()
-                case ('r'):
-                    return reload_game()
-                case ('s'):
-                    return save_game()
-                case ('q'):
-                    return False
+            if (key.char == 'a'):
+                return move_disk(rod='A')
+            elif (key.char == 'b'):
+                return move_disk(rod='B')
+            elif (key.char == 'c'):
+                return move_disk(rod='C')
+            elif (key.char == 'l'):
+                return reload_game()
+            elif (key.char == 'r'):
+                return reload_game()
+            elif (key.char == 's'):
+                return save_game()
+            elif (key.char == 'q'):
+                return False
         else:
             if (key == Key.esc):
                 return False
