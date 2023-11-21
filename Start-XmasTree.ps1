@@ -35,7 +35,7 @@ Red     31 41
 Green   32 42
 Yellow  33 43
 Blue    34 44
-Magenta 35 45
+Magenta 35 45  (use 95 105 Bright Magenta due to a PowerShell console bug)
 Cyan    36 46
 White   37 47
 Default 39 49
@@ -44,6 +44,9 @@ Gray    90 100 (Bright Black)
 Native console colors are used with Write-Host whenever possible.  The Xmas
 tree ornament replacement colors use ANSI escape codes for improved speed.
 The ANSI escape codes require a console window and do not work in the ISE.
+
+Due to a bug in the PowerShell console, normal Magenta does not render on
+certain colors of background.  Bright Magenta is used as a work-around.
 
 MIT License
 
@@ -170,7 +173,7 @@ function Start-Gameplay
       $colorB = [System.ConsoleColor]::Green;
       $colorC = [System.ConsoleColor]::Green;
       $esc    = [char]27;
-      $small  = "$esc[35mo$esc[32m";
+      $small  = "$esc[95mo$esc[32m"; # bright color variant
       $large  = "$esc[36mO$esc[32m";
 
       # Set rod A level as disk or spaces
