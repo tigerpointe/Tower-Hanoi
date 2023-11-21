@@ -26,6 +26,25 @@ Starts the program.
 Instead of disks and rods, this holiday-themed "Tower of Hanoi" game is played
 with boughs and bases.
 
+ANSI Color Escape Codes, $esc = [char]27 (ASCII Dec Value)
+(ex. foreground black '$esc[30m' and background white '$esc[47m')
+COLOR   FG BG
+Reset   0  0
+Black   30 40
+Red     31 41
+Green   32 42
+Yellow  33 43
+Blue    34 44
+Magenta 35 45
+Cyan    36 46
+White   37 47
+Default 39 49
+Gray    90 100 (Bright Black)
+
+Native console colors are used with Write-Host whenever possible.  The Xmas
+tree ornament replacement colors use ANSI escape codes for improved speed.
+The ANSI escape codes require a console window and do not work in the ISE.
+
 MIT License
 
 Copyright (c) 2023 TigerPointe Software, LLC
@@ -77,19 +96,19 @@ $ascii = @"
          ( o o )
          '"'"'"'
        ./'"'"'"'\.
-       ( o  o  o )
+       ( o  O  o )
        "'"'"'"'"'"
      ./"'"'"'"'"'"\.
-     ( o  o   o  o )
+     ( o  O   O  o )
      '"'"'"'"'"'"'"'
    ./'"'"'"'"'"'"'"'\.
-   ( O  O   O   O  O )
+   ( o  O   o   O  o )
    "'"'"'"'"'"'"'"'"'"
  ./"'"'"'"'"'"'"'"'"'"\.
- ( O  O   O   O   O  O )
+ ( o  O   o   o   O  o )
  '"'"'"'"'"'"'"'"'"'"'"'
 /'"'"'"'"'"'"'"'"'"'"'"'\
-.O  O   O   O   O   O  O.
+.o  O   o   O   o   O  o.
 "'"'"'"'"'"'"'"'"'"'"'"'"
         '=,...,='
     ..--..]###[..--..
@@ -150,6 +169,9 @@ function Start-Gameplay
       $colorA = [System.ConsoleColor]::Green;
       $colorB = [System.ConsoleColor]::Green;
       $colorC = [System.ConsoleColor]::Green;
+      $esc    = [char]27;
+      $small  = "$esc[35mo$esc[32m";
+      $large  = "$esc[36mO$esc[32m";
 
       # Set rod A level as disk or spaces
       if ($x -lt $data["A"].Count)
@@ -161,6 +183,11 @@ function Start-Gameplay
         if ($data["A"][$x] -eq 1)
         {
           $colorA = [System.ConsoleColor]::Yellow; # special top color
+        }
+        elseif ($null -eq $psISE) # escape codes require a console
+        {
+          $outA2 = $outA2.replace('o', $small) # ornament color
+          $outA2 = $outA2.replace('O', $large) # ornament color
         }
       }
       else
@@ -181,6 +208,11 @@ function Start-Gameplay
         {
           $colorB = [System.ConsoleColor]::Yellow; # special top color
         }
+        elseif ($null -eq $psISE) # escape codes require a console
+        {
+          $outB2 = $outB2.replace('o', $small) # ornament color
+          $outB2 = $outB2.replace('O', $large) # ornament color
+        }
       }
       else
       {
@@ -199,6 +231,11 @@ function Start-Gameplay
         if ($data["C"][$x] -eq 1)
         {
           $colorC = [System.ConsoleColor]::Yellow; # special top color
+        }
+        elseif ($null -eq $psISE) # escape codes require a console
+        {
+          $outC2 = $outC2.replace('o', $small) # ornament color
+          $outC2 = $outC2.replace('O', $large) # ornament color
         }
       }
       else
@@ -470,5 +507,7 @@ catch
 }
 finally
 {
+  $esc = [char]27;
+  Write-Host -NoNewline -Object "$esc[0m"; # tidy up, just in case
   Read-Host -Prompt "Press the ENTER key to exit the game";
 }

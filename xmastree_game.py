@@ -8,7 +8,7 @@ History:
 Instead of disks and rods, this holiday-themed "Tower of Hanoi" game is played
 with boughs and bases.
 
-ANSI Color Escape Codes
+ANSI Color Escape Codes, ESC = \033 (ASCII Hex Value)
 (ex. foreground black '\033[30m' and background white '\033[47m')
 COLOR   FG BG
 Reset   0  0
@@ -71,19 +71,19 @@ ascii = """
          ( o o )
          '\"'\"'\"'
        ./'\"'\"'\"'\\.
-       ( o  o  o )
+       ( o  O  o )
        \"'\"'\"'\"'\"'\"
      ./\"'\"'\"'\"'\"'\"\\.
-     ( o  o   o  o )
+     ( o  O   O  o )
      '\"'\"'\"'\"'\"'\"'\"'
    ./'\"'\"'\"'\"'\"'\"'\"'\\.
-   ( O  O   O   O  O )
+   ( o  O   o   O  o )
    \"'\"'\"'\"'\"'\"'\"'\"'\"'\"
  ./\"'\"'\"'\"'\"'\"'\"'\"'\"'\"\\.
- ( O  O   O   O   O  O )
+ ( o  O   o   o   O  o )
  '\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'
 /'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\\
-.O  O   O   O   O   O  O.
+.o  O   o   O   o   O  o.
 \"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"'\"
         '=,...,='
     ..--..]###[..--..
@@ -135,6 +135,8 @@ def play(height=2, solve=False):
             colorA = '\033[32m'
             colorB = '\033[32m'
             colorC = '\033[32m'
+            small = '\033[35mo\033[32m'
+            large = '\033[36mO\033[32m'
             reset = '\033[0m'
 
             # Set rod A level as disk or spaces
@@ -145,6 +147,9 @@ def play(height=2, solve=False):
                 outA3 = lines[idx + 2]
                 if ((data['A'][x] == 1)):
                     colorA = '\033[33m'  # special top color
+                else:
+                    outA2 = outA2.replace('o', small)  # ornament color
+                    outA2 = outA2.replace('O', large)  # ornament color
             else:
                 outA1 = ' ' * len(lines[0])
                 outA2 = outA1
@@ -158,6 +163,9 @@ def play(height=2, solve=False):
                 outB3 = lines[idx + 2]
                 if ((data['B'][x] == 1)):
                     colorB = '\033[33m'  # special top color
+                else:
+                    outB2 = outB2.replace('o', small)  # ornament color
+                    outB2 = outB2.replace('O', large)  # ornament color
             else:
                 outB1 = ' ' * len(lines[0])
                 outB2 = outB1
@@ -171,6 +179,9 @@ def play(height=2, solve=False):
                 outC3 = lines[idx + 2]
                 if ((data['C'][x] == 1)):
                     colorC = '\033[33m'  # special top color
+                else:
+                    outC2 = outC2.replace('o', small)  # ornament color
+                    outC2 = outC2.replace('O', large)  # ornament color
             else:
                 outC1 = ' ' * len(lines[0])
                 outC2 = outC1
