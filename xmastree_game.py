@@ -10,18 +10,25 @@ with boughs and bases.
 
 ANSI Color Escape Codes, ESC = \033 (ASCII Hex Value)
 (ex. foreground black '\033[30m' and background white '\033[47m')
-COLOR   FG BG
-Reset   0  0
-Black   30 40
-Red     31 41
-Green   32 42
-Yellow  33 43
-Blue    34 44
-Magenta 35 45
-Cyan    36 46
-White   37 47
-Default 39 49
-Gray    90 100 (Bright Black)
+COLOR          FG BG
+Reset          0  0
+Black          30 40
+Red            31 41
+Green          32 42
+Yellow         33 43
+Blue           34 44
+Magenta        35 45
+Cyan           36 46
+White          37 47
+Default        39 49
+Bright Black   90 100 (Gray)
+Bright Red     91 101
+Bright Green   92 102
+Bright Yellow  93 103
+Bright Blue    94 104
+Bright Magenta 95 105
+Bright Cyan    96 106
+Bright White   97 107
 
 MIT License
 
@@ -135,8 +142,8 @@ def play(height=2, solve=False):
             colorA = '\033[32m'
             colorB = '\033[32m'
             colorC = '\033[32m'
-            small = '\033[35mo\033[32m'
-            large = '\033[36mO\033[32m'
+            small = '\033[95mo\033[32m'
+            large = '\033[96mO\033[32m'
             reset = '\033[0m'
 
             # Set rod A level as disk or spaces
@@ -146,7 +153,7 @@ def play(height=2, solve=False):
                 outA2 = lines[idx + 1]
                 outA3 = lines[idx + 2]
                 if ((data['A'][x] == 1)):
-                    colorA = '\033[33m'  # special top color
+                    colorA = '\033[63m'  # special top color
                 else:
                     outA2 = outA2.replace('o', small)  # ornament color
                     outA2 = outA2.replace('O', large)  # ornament color
@@ -162,7 +169,7 @@ def play(height=2, solve=False):
                 outB2 = lines[idx + 1]
                 outB3 = lines[idx + 2]
                 if ((data['B'][x] == 1)):
-                    colorB = '\033[33m'  # special top color
+                    colorB = '\033[63m'  # special top color
                 else:
                     outB2 = outB2.replace('o', small)  # ornament color
                     outB2 = outB2.replace('O', large)  # ornament color
@@ -178,7 +185,7 @@ def play(height=2, solve=False):
                 outC2 = lines[idx + 1]
                 outC3 = lines[idx + 2]
                 if ((data['C'][x] == 1)):
-                    colorC = '\033[33m'  # special top color
+                    colorC = '\033[63m'  # special top color
                 else:
                     outC2 = outC2.replace('o', small)  # ornament color
                     outC2 = outC2.replace('O', large)  # ornament color

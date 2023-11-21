@@ -28,18 +28,25 @@ with boughs and bases.
 
 ANSI Color Escape Codes, $esc = [char]27 (ASCII Dec Value)
 (ex. foreground black '$esc[30m' and background white '$esc[47m')
-COLOR   FG BG
-Reset   0  0
-Black   30 40
-Red     31 41
-Green   32 42
-Yellow  33 43
-Blue    34 44
-Magenta 35 45  (use 95 105 Bright Magenta due to a PowerShell console bug)
-Cyan    36 46
-White   37 47
-Default 39 49
-Gray    90 100 (Bright Black)
+COLOR          FG BG
+Reset          0  0
+Black          30 40
+Red            31 41
+Green          32 42
+Yellow         33 43
+Blue           34 44
+Magenta        35 45
+Cyan           36 46
+White          37 47
+Default        39 49
+Bright Black   90 100 (Gray)
+Bright Red     91 101
+Bright Green   92 102
+Bright Yellow  93 103
+Bright Blue    94 104
+Bright Magenta 95 105
+Bright Cyan    96 106
+Bright White   97 107
 
 Native console colors are used with Write-Host whenever possible.  The Xmas
 tree ornament replacement colors use ANSI escape codes for improved speed.
@@ -173,8 +180,8 @@ function Start-Gameplay
       $colorB = [System.ConsoleColor]::Green;
       $colorC = [System.ConsoleColor]::Green;
       $esc    = [char]27;
-      $small  = "$esc[95mo$esc[32m"; # bright color variant
-      $large  = "$esc[36mO$esc[32m";
+      $small  = "$esc[95mo$esc[32m";
+      $large  = "$esc[96mO$esc[32m";
 
       # Set rod A level as disk or spaces
       if ($x -lt $data["A"].Count)
@@ -289,7 +296,7 @@ function Start-Gameplay
     $labelA = $label.Replace("X", "A");
     $labelB = $label.Replace("X", "B");
     $labelC = $label.Replace("X", "C");
-    Write-Host -BackgroundColor Red -ForegroundColor White `
+    Write-Host -BackgroundColor DarkRed -ForegroundColor White `
                -Object "$labelA$labelB$labelC";
 
   }
@@ -480,7 +487,7 @@ function Start-Gameplay
 try
 {
   Clear-Host;
-  Write-Host -BackgroundColor Red -ForegroundColor White `
+  Write-Host -BackgroundColor DarkRed -ForegroundColor White `
              -Object "         THE XMAS TREE GAME (TOWER OF HANOI)         ";
   [int]$height = Read-Host -Prompt `
                    "Enter the Xmas tree height/difficulty level [2-7]";
@@ -501,7 +508,7 @@ try
     "  Press S to save the game, R or L to restore/load a saved game";
   Write-Host -Object "  Press ESC or Q to quit";
   Start-Gameplay -height $height -solve ($solve -eq "y");
-  Write-Host -ForegroundColor Cyan `
+  Write-Host -ForegroundColor DarkCyan `
              -Object "MERRY CHRISTMAS AND HAPPY HOLIDAYS";
 }
 catch
