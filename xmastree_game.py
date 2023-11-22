@@ -139,6 +139,7 @@ def play(height=2, solve=False):
         for x in reversed(range(data['height'])):
 
             # Set the default colors
+            topper = '\033[93m'
             colorA = '\033[32m'
             colorB = '\033[32m'
             colorC = '\033[32m'
@@ -153,7 +154,7 @@ def play(height=2, solve=False):
                 outA2 = lines[idx + 1]
                 outA3 = lines[idx + 2]
                 if ((data['A'][x] == 1)):
-                    colorA = '\033[93m'  # special top color
+                    colorA = topper  # special top color
                 else:
                     outA2 = outA2.replace('o', small)  # ornament color
                     outA2 = outA2.replace('O', large)  # ornament color
@@ -169,7 +170,7 @@ def play(height=2, solve=False):
                 outB2 = lines[idx + 1]
                 outB3 = lines[idx + 2]
                 if ((data['B'][x] == 1)):
-                    colorB = '\033[93m'  # special top color
+                    colorB = topper  # special top color
                 else:
                     outB2 = outB2.replace('o', small)  # ornament color
                     outB2 = outB2.replace('O', large)  # ornament color
@@ -185,7 +186,7 @@ def play(height=2, solve=False):
                 outC2 = lines[idx + 1]
                 outC3 = lines[idx + 2]
                 if ((data['C'][x] == 1)):
-                    colorC = '\033[93m'  # special top color
+                    colorC = topper  # special top color
                 else:
                     outC2 = outC2.replace('o', small)  # ornament color
                     outC2 = outC2.replace('O', large)  # ornament color

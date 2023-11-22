@@ -176,6 +176,7 @@ function Start-Gameplay
     {
 
       # Set the default colors
+      $topper = [System.ConsoleColor]::Yellow;
       $colorA = [System.ConsoleColor]::Green;
       $colorB = [System.ConsoleColor]::Green;
       $colorC = [System.ConsoleColor]::Green;
@@ -192,7 +193,7 @@ function Start-Gameplay
         $outA3 = $lines[$idx + 2];
         if ($data["A"][$x] -eq 1)
         {
-          $colorA = [System.ConsoleColor]::Yellow; # special top color
+          $colorA = $topper; # special top color
         }
         elseif ($null -eq $psISE) # escape codes require a console
         {
@@ -216,7 +217,7 @@ function Start-Gameplay
         $outB3 = $lines[$idx + 2];
         if ($data["B"][$x] -eq 1)
         {
-          $colorB = [System.ConsoleColor]::Yellow; # special top color
+          $colorB = $topper; # special top color
         }
         elseif ($null -eq $psISE) # escape codes require a console
         {
@@ -240,7 +241,7 @@ function Start-Gameplay
         $outC3 = $lines[$idx + 2];
         if ($data["C"][$x] -eq 1)
         {
-          $colorC = [System.ConsoleColor]::Yellow; # special top color
+          $colorC = $topper; # special top color
         }
         elseif ($null -eq $psISE) # escape codes require a console
         {
