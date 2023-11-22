@@ -433,7 +433,7 @@ function Start-Gameplay
   }
 
   function Invoke-OnPress
-  # Invokes the keypress event.
+  # Invokes the keypress event handler code.
   {
     param
     (
