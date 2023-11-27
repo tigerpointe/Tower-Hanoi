@@ -8,8 +8,8 @@ History:
 Instead of disks and rods, this holiday-themed "Tower of Hanoi" game is played
 with boughs and bases.
 
-ANSI Color Escape Codes, ESC = \033 (ASCII Hex Value)
-(ex. foreground black '\033[30m' and background white '\033[47m')
+ANSI Color Escape Codes, ESC = \\033 (ASCII Hex Value)
+(ex. foreground black '\\033[30m' and background white '\\033[47m')
 COLOR          FG BG
 Reset          0  0
 Black          30 40
@@ -65,7 +65,7 @@ import os
 import time
 
 # Enable the console escape codes
-os.system('')
+_ = os.system('')
 
 # Define the ASCII artwork (original image by Scott S.)
 # Each disk level must contain three rows of text
