@@ -273,24 +273,12 @@ function Start-Gameplay
     }
 
     # Write the rod bases A, B, C
-    $color = [System.ConsoleColor]::DarkGray;
-    $out   = $lines[$lines.Count - 3];
-    Write-Host -NoNewline -ForegroundColor $color `
-               -Object $out;
-    Write-Host -NoNewline -ForegroundColor $color `
-               -Object $out;
-    Write-Host -NoNewline -ForegroundColor $color `
-               -Object $out;
-    Write-Host;
-    $color = [System.ConsoleColor]::DarkGray;
-    $out   = $lines[$lines.Count - 2];
-    Write-Host -NoNewline -ForegroundColor $color `
-               -Object $out;
-    Write-Host -NoNewline -ForegroundColor $color `
-               -Object $out;
-    Write-Host -NoNewline -ForegroundColor $color `
-               -Object $out;
-    Write-Host;
+    $out = $lines[$lines.Count - 3];
+    Write-Host -ForegroundColor DarkGray `
+               -Object "$out$out$out";
+    $out = $lines[$lines.Count - 2];
+    Write-Host -ForegroundColor DarkGray `
+               -Object "$out$out$out";
 
     # Write the rod labels A, B, C
     $label  = $lines[$lines.Count - 1].Replace("=", " ");
